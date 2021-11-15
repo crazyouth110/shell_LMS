@@ -1,0 +1,36 @@
+#!/usr/bin/bash
+. /home/cy/bin/libfunc.sh	#引入函数脚本，绝对路径
+trap 'rm -rf /tmp/tmp$$ &> /dev/null;tput sgr0;tput clear' EXIT		#信号捕捉，退出处理
+
+APP_VERSION="2.0"			#版本
+db=${1:-"/home/cy/bin/books.db"}	#数据库位置，绝对路径
+if [ ! -e $db];then touch $db; fi	#若数据库不存在则新建
+pd="/home/cy/bin/passwd"		#账户信息位置
+
+
+sysname="Personal Library Management System"
+sysversion="Version: $APP_VERSION "
+sysauthor="cy@jxnu.edu.cn"
+sysdate=$( date +%F )
+
+cblack=0		#颜色
+cred=1
+cgreen=2
+cbrown=3
+cblue=4
+cmagenta=5
+ccyan=6
+cwhite=7
+
+wwidth=$(tput cols)		#界面宽度
+wheight=$(tput lines)		#界面高度
+noticeheight=$((wheight-4))	#提示框高度
+
+s21-cover
+s21-login
+loginres=$?			#根据返回值提供相应界面
+if [ "$loginres" = "1" ];then 
+	s21-main-user
+elif [ "$loginres" = "2" ];then
+	s21-main-admin
+fi
